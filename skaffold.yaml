@@ -1,0 +1,26 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+deploy:
+  kubectl:
+    remoteManifests:
+      - "./k8s/*"
+build:
+  local:
+    push: false
+  artifacts:
+    - image: harukiraito/ticket-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.ts"
+    - image: harukiraito/ticket-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "**/*.js"
